@@ -3,21 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              clifford: "#da373d",
-            },
-          },
-        },
-      };
-    </script>
-    <title>LesPetitsPlats</title>
+    <title>Les Petits Plats</title>
+    <!-- Lien vers votre fichier CSS personnalisé qui importe Tailwind -->
+    <link rel="stylesheet" href="./dist/styles.css">
   </head>
-  <body>
-    <h1 class="text-3xl font-bold underline text-clifford">Hello world!</h1>
+  <body class="font-manrope">
+    <header
+      class="h-[960px] bg-cover bg-no-repeat bg-center"
+      style="background-image: url('./assets/logo.jpg')"
+    ></header>
+
+    <button class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-700 font-anton">
+      Cliquez ici dsq
+    </button>
   </body>
 </html>

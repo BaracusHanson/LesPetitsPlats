@@ -1,0 +1,16 @@
+# Node modules
+/node_modules
+
+# Fichiers générés par le build
+/dist
+/build
+
+# Fichiers d'environnement
+.env
+
+# Log files
+*.log
+
+# Fichiers système
+.DS_Store
+Thumbs.db
