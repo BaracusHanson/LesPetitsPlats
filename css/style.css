@@ -20,9 +20,17 @@
   background-image: url(../assets/Logo.jpg);
 }
 
-
 @layer utilities {
   .flex-between-center {
     @apply flex justify-center items-center;
   }
+}
+
+/* Masquer la barre de défilement */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
