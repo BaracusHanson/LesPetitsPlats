@@ -34,3 +34,20 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+p {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chevron-active {
+  transition: all 0.3s ease;
+  transform: rotate(180deg);
+}
+
+.infos-active {
+  display: block;
+}
