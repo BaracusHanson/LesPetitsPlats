@@ -92,8 +92,10 @@ datas();
 function openFilter() {
   const button = document.getElementById("ingredientButton");
   const AppareilsButton = document.getElementById("AppareilsButton");
+  const UstensilsButton = document.getElementById("UstensilsButton");
   const infos = document.querySelector(".infos");
   const Appareilsinfos = document.querySelector(".Appareilsinfos");
+  const UstensilInfos = document.querySelector(".UstensilInfos");
   button.addEventListener("click", () => {
     console.log("open");
     button.classList.toggle("chevron-active");
@@ -105,6 +107,12 @@ function openFilter() {
     AppareilsButton.classList.toggle("chevron-active");
     isOpen = true;
     Appareilsinfos.classList.toggle("infos-active");
+  });
+  UstensilsButton.addEventListener("click", () => {
+    console.log("open");
+    UstensilsButton.classList.toggle("chevron-active");
+    isOpen = true;
+    UstensilInfos.classList.toggle("infos-active");
   });
 }
 
@@ -119,6 +127,8 @@ async function globalSearch() {
   const recettes = await fetchRecipes();
   globalInput.addEventListener("input", (e) => {
     const criteria = e.target.value;
+    if (criteria === "") {
+    }
     searchRecipesNative(recettes, criteria);
   });
 }
@@ -185,6 +195,7 @@ async function getAllIngredients() {
   const recipes = await fetchRecipes();
   let ingredientTagTable = [];
   let appareilTagTable = [];
+  let ustensilTagTable = [];
 
   // Collecte des ingrédients
   recipes.forEach((recipe) => {
@@ -193,35 +204,48 @@ async function getAllIngredients() {
     });
   });
   // Collecte des appareils
-recipes.forEach(element => {
-  let appareils = element.appliance
-  appareilTagTable.push(appareils)
-});
+  recipes.forEach((element) => {
+    let appareils = element.appliance;
+    appareilTagTable.push(appareils);
+  });
+  // Collecte des Ustensils
+  recipes.forEach((recipe) => {
+    recipe.ustensils.forEach((ustensil) => {
+      ustensilTagTable.push(ustensil);
+    });
+  });
 
-;
-
-// Suppression des doublons
-ingredientTagTable = [...new Set(ingredientTagTable)];
-// console.log("avec doublon possible :",appareilTagTable);
-appareilTagTable = [...new Set(appareilTagTable)];
-console.log("sans doublon :",appareilTagTable);
+  // Suppression des doublons
+  ingredientTagTable = [...new Set(ingredientTagTable)];
+  appareilTagTable = [...new Set(appareilTagTable)];
+  console.log(ustensilTagTable);
+  ustensilTagTable = [...new Set(ustensilTagTable)];
+  console.log(ustensilTagTable);
 
   // Sélection des éléments du DOM
   const ingredientSearch = document.querySelector("#ingredientSearch");
   const AppareilsSearch = document.querySelector("#AppareilsSearch");
+  const UstensilsSearch = document.querySelector("#UstensilsSearch");
   const ingredientListe = document.querySelector("#ingredientListe");
   const AppareilsListe = document.querySelector("#AppareilsListe");
+  const UstensilsListe = document.querySelector("#UstensilsListe");
   const ingredientsTag = document.getElementById("ingredientsTag");
   const AppareilsTag = document.getElementById("AppareilsTag");
+  const UstensilsTag = document.getElementById("UstensilsTag");
   const tagingredient = document.getElementById("tagingredient");
   const tagAppareils = document.getElementById("tagAppareils");
+  const tagUstensils = document.getElementById("tagUstensils");
   const button = document.getElementById("ingredientButton");
   const ingredientTagClose = document.getElementById("ingredientTagClose");
   const AppareilsTagClose = document.getElementById("AppareilsTagClose");
+  const UstensilsTagClose = document.getElementById("UstensilsTagClose");
   const tagCloser = document.getElementById("tagCloser");
   const tagCloserAppareil = document.getElementById("tagCloserAppareil");
+  const tagCloserUstensil = document.getElementById("tagCloserUstensil");
+
   const infos = document.querySelector(".infos");
   const Appareilsinfos = document.querySelector(".Appareilsinfos");
+  const UstensilInfos = document.querySelector(".UstensilInfos");
 
   // Fonction pour afficher les ingrédients dans la liste
   function updateIngredientList(filteredIngredients) {
@@ -258,12 +282,11 @@ console.log("sans doublon :",appareilTagTable);
       })
       .join("");
 
-      AppareilsListe.innerHTML = result;
+    AppareilsListe.innerHTML = result;
 
     // Ajouter les gestionnaires d'événements pour chaque élément
     const li = AppareilsListe.querySelectorAll(".appareil");
-    
-    
+
     li.forEach((l) => {
       l.addEventListener("click", () => {
         console.log("ok");
@@ -276,11 +299,38 @@ console.log("sans doublon :",appareilTagTable);
       });
     });
   }
+  // Fonction pour afficher les ustensils dans la liste
+  function updateUstensilList(filteredUstensils) {
+    const result = filteredUstensils
+      .map((el, index) => {
+        return `<li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0 ustensil" data-index="${index} ">
+                    ${el}
+                  </li>`;
+      })
+      .join("");
 
+    UstensilsListe.innerHTML = result;
+
+    // Ajouter les gestionnaires d'événements pour chaque élément
+    const li = document.querySelectorAll(".ustensil");
+
+    li.forEach((l) => {
+      l.addEventListener("click", () => {
+        console.log("ok");
+        const criteria = l.textContent.trim();
+        UstensilsTag.textContent = criteria;
+        button.classList.remove("chevron-active");
+        UstensilInfos.classList.remove("infos-active");
+        tagUstensils.classList.remove("hidden");
+        searchRecipesNative(recipes, criteria);
+      });
+    });
+  }
 
   // Initialiser la liste avec tous les ingrédients
   updateIngredientList(ingredientTagTable);
   updateAppareilList(appareilTagTable);
+  updateUstensilList(ustensilTagTable);
 
   // Recherche dynamique dans les ingrédients
   ingredientSearch.addEventListener("input", (e) => {
@@ -308,6 +358,19 @@ console.log("sans doublon :",appareilTagTable);
       updateAppareilList(appareilTagTable);
     }
   });
+  // Recherche dynamique dans les ustensils
+  UstensilsSearch.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value !== "") {
+      const filteredustensils = ustensilTagTable.filter((el) =>
+        el.toLowerCase().includes(value)
+      );
+      updateUstensilList(filteredustensils);
+    } else {
+      // Si aucun texte n'est saisi, afficher tous les ingrédients
+      updateUstensilList(ustensilTagTable);
+    }
+  });
 
   // Gestion du bouton de fermeture des tags ingredients
   ingredientTagClose.addEventListener("click", () => {
@@ -329,6 +392,16 @@ console.log("sans doublon :",appareilTagTable);
     AppareilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
+  // Gestion du bouton de fermeture des tags ustensils
+  UstensilsTagClose.addEventListener("click", () => {
+    UstensilsSearch.value = "";
+    updateUstensilList(ustensilTagTable);
+    tagUstensils.classList.add("hidden");
+    UstensilInfos.classList.remove("infos-active");
+    console.log("ok");
+    UstensilsTag.textContent = "";
+    displayRecipes(recipes); // Affiche toutes les recettes
+  });
   // Gestion du bouton de fermeture des tags ingredients
   tagCloser.addEventListener("click", () => {
     ingredientSearch.value = "";
@@ -341,12 +414,22 @@ console.log("sans doublon :",appareilTagTable);
   });
   // Gestion du bouton de fermeture des tags apareils
   tagCloserAppareil.addEventListener("click", () => {
-    ingredientSearch.value = "";
-    updateIngredientList(ingredientTagTable);
-    tagingredient.classList.add("hidden");
-    infos.classList.remove("infos-active");
+    AppareilsSearch.value = "";
+    updateAppareilList(appareilTagTable);
+    tagAppareils.classList.add("hidden");
+    Appareilsinfos.classList.remove("infos-active");
     console.log("ok");
-    ingredientsTag.textContent = "";
+    AppareilsTag.textContent = "";
+    displayRecipes(recipes); // Affiche toutes les recettes
+  });
+  // Gestion du bouton de fermeture des tags apareils
+  tagCloserUstensil.addEventListener("click", () => {
+    AppareilsSearch.value = "";
+    updateAppareilList(appareilTagTable);
+    tagUstensils.classList.add("hidden");
+    UstensilInfos.classList.remove("infos-active");
+    console.log("ok");
+    UstensilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
 }
