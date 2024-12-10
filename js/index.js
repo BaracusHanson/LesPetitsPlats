@@ -91,12 +91,20 @@ datas();
 
 function openFilter() {
   const button = document.getElementById("ingredientButton");
+  const AppareilsButton = document.getElementById("AppareilsButton");
   const infos = document.querySelector(".infos");
+  const Appareilsinfos = document.querySelector(".Appareilsinfos");
   button.addEventListener("click", () => {
     console.log("open");
     button.classList.toggle("chevron-active");
     isOpen = true;
     infos.classList.toggle("infos-active");
+  });
+  AppareilsButton.addEventListener("click", () => {
+    console.log("open");
+    AppareilsButton.classList.toggle("chevron-active");
+    isOpen = true;
+    Appareilsinfos.classList.toggle("infos-active");
   });
 }
 
@@ -176,6 +184,7 @@ function searchRecipesNative(recipes, query, ...criteria) {
 async function getAllIngredients() {
   const recipes = await fetchRecipes();
   let ingredientTagTable = [];
+  let appareilTagTable = [];
 
   // Collecte des ingrédients
   recipes.forEach((recipe) => {
@@ -183,25 +192,42 @@ async function getAllIngredients() {
       ingredientTagTable.push(ingredient.ingredient);
     });
   });
+  // Collecte des appareils
+recipes.forEach(element => {
+  let appareils = element.appliance
+  appareilTagTable.push(appareils)
+});
 
-  // Suppression des doublons
-  ingredientTagTable = [...new Set(ingredientTagTable)];
+;
+
+// Suppression des doublons
+ingredientTagTable = [...new Set(ingredientTagTable)];
+// console.log("avec doublon possible :",appareilTagTable);
+appareilTagTable = [...new Set(appareilTagTable)];
+console.log("sans doublon :",appareilTagTable);
 
   // Sélection des éléments du DOM
   const ingredientSearch = document.querySelector("#ingredientSearch");
+  const AppareilsSearch = document.querySelector("#AppareilsSearch");
   const ingredientListe = document.querySelector("#ingredientListe");
+  const AppareilsListe = document.querySelector("#AppareilsListe");
   const ingredientsTag = document.getElementById("ingredientsTag");
+  const AppareilsTag = document.getElementById("AppareilsTag");
   const tagingredient = document.getElementById("tagingredient");
+  const tagAppareils = document.getElementById("tagAppareils");
   const button = document.getElementById("ingredientButton");
   const ingredientTagClose = document.getElementById("ingredientTagClose");
+  const AppareilsTagClose = document.getElementById("AppareilsTagClose");
   const tagCloser = document.getElementById("tagCloser");
+  const tagCloserAppareil = document.getElementById("tagCloserAppareil");
   const infos = document.querySelector(".infos");
+  const Appareilsinfos = document.querySelector(".Appareilsinfos");
 
   // Fonction pour afficher les ingrédients dans la liste
   function updateIngredientList(filteredIngredients) {
     const result = filteredIngredients
       .map((el, index) => {
-        return `<li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0" data-index="${index}">
+        return `<li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0 ingredient" data-index="${index}">
                     ${el}
                   </li>`;
       })
@@ -210,7 +236,7 @@ async function getAllIngredients() {
     ingredientListe.innerHTML = result;
 
     // Ajouter les gestionnaires d'événements pour chaque élément
-    const li = ingredientListe.querySelectorAll("li");
+    const li = ingredientListe.querySelectorAll(".ingredient");
     li.forEach((l) => {
       l.addEventListener("click", () => {
         const criteria = l.textContent.trim();
@@ -222,9 +248,39 @@ async function getAllIngredients() {
       });
     });
   }
+  // Fonction pour afficher les appareils dans la liste
+  function updateAppareilList(filteredAppareils) {
+    const result = filteredAppareils
+      .map((el, index) => {
+        return `<li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0 appareil" data-index="${index} ">
+                    ${el}
+                  </li>`;
+      })
+      .join("");
+
+      AppareilsListe.innerHTML = result;
+
+    // Ajouter les gestionnaires d'événements pour chaque élément
+    const li = AppareilsListe.querySelectorAll(".appareil");
+    
+    
+    li.forEach((l) => {
+      l.addEventListener("click", () => {
+        console.log("ok");
+        const criteria = l.textContent.trim();
+        AppareilsTag.textContent = criteria;
+        button.classList.remove("chevron-active");
+        Appareilsinfos.classList.remove("infos-active");
+        tagAppareils.classList.remove("hidden");
+        searchRecipesNative(recipes, criteria);
+      });
+    });
+  }
+
 
   // Initialiser la liste avec tous les ingrédients
   updateIngredientList(ingredientTagTable);
+  updateAppareilList(appareilTagTable);
 
   // Recherche dynamique dans les ingrédients
   ingredientSearch.addEventListener("input", (e) => {
@@ -239,8 +295,21 @@ async function getAllIngredients() {
       updateIngredientList(ingredientTagTable);
     }
   });
+  // Recherche dynamique dans les appareils
+  AppareilsSearch.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value !== "") {
+      const filteredAppareils = appareilTagTable.filter((el) =>
+        el.toLowerCase().includes(value)
+      );
+      updateAppareilList(filteredAppareils);
+    } else {
+      // Si aucun texte n'est saisi, afficher tous les ingrédients
+      updateAppareilList(appareilTagTable);
+    }
+  });
 
-  // Gestion du bouton de fermeture des tags
+  // Gestion du bouton de fermeture des tags ingredients
   ingredientTagClose.addEventListener("click", () => {
     ingredientSearch.value = "";
     updateIngredientList(ingredientTagTable);
@@ -250,8 +319,28 @@ async function getAllIngredients() {
     ingredientsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
-  // Gestion du bouton de fermeture des tags
+  // Gestion du bouton de fermeture des tags appareils
+  AppareilsTagClose.addEventListener("click", () => {
+    AppareilsSearch.value = "";
+    updateIngredientList(ingredientTagTable);
+    tagAppareils.classList.add("hidden");
+    Appareilsinfos.classList.remove("infos-active");
+    console.log("ok");
+    AppareilsTag.textContent = "";
+    displayRecipes(recipes); // Affiche toutes les recettes
+  });
+  // Gestion du bouton de fermeture des tags ingredients
   tagCloser.addEventListener("click", () => {
+    ingredientSearch.value = "";
+    updateIngredientList(ingredientTagTable);
+    tagingredient.classList.add("hidden");
+    infos.classList.remove("infos-active");
+    console.log("ok");
+    ingredientsTag.textContent = "";
+    displayRecipes(recipes); // Affiche toutes les recettes
+  });
+  // Gestion du bouton de fermeture des tags apareils
+  tagCloserAppareil.addEventListener("click", () => {
     ingredientSearch.value = "";
     updateIngredientList(ingredientTagTable);
     tagingredient.classList.add("hidden");
