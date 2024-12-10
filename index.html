@@ -62,6 +62,7 @@
         class="z-50 w-[954px] h-[72px] bg-white rounded-[11px] flex justify-between items-center"
       >
         <input
+          id="globalInput"
           class="text-[#7a7a7a] text-[16px] font-normal font-manrope w-1/2 rounded-[0px] ml-9 outline-none"
           placeholder="Rechercher une recette, un ingrédient, ..."
         />
@@ -108,10 +109,10 @@
                   class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
                 >
                   <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full" id="ingredientSearch"
                   />
                   <div class="flex items-center justify-center text-xs">
-                    <i class="text-[#7a7a7a] fa-solid fa-xmark"></i>
+                    <i class="text-[#7a7a7a] fa-solid fa-xmark" id="tagCloser"></i>
                     <div class="m-2 text-[#7a7a7a] flex-between-center">
                       <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
@@ -119,45 +120,24 @@
                 </div>
                 <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
                 <ul
-                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer"
-                >
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                  <li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0">
-                    Creme de coco
-                  </li>
-                </ul>
+                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer w-full mt-[37px]"
+                  id="ingredientListe"
+                ></ul>
               </div>
             </div>
             <!-- tags -->
             <div
-              class="flex flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border"
+              class=" flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden" id="tagingredient"
             >
               <div
-                class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
+                class="flex justify-between items-center  mx-[17px] my-4"
               >
                 <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
+                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize" id="ingredientsTag"
                 >
                   ingredients
                 </h1>
-                <button id="ingredientButton">
+                <button id="ingredientTagClose">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
