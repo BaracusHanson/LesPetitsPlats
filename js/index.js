@@ -46,7 +46,7 @@ function generateRecipeCard(recipe) {
                 Ingrédients
               </h3>
               <ul class="grid grid-cols-2 gap-y-[21px]">
-                ${recipe.ingredients
+                ${recipe?.ingredients
                   .map((ingredient) => generateIngredientListItem(ingredient))
                   .join("")}
               </ul>
@@ -71,8 +71,13 @@ function generateIngredientListItem(ingredient) {
 
 // Fonction pour afficher les cartes dans le conteneur
 function displayRecipes(recipes) {
+  const nlRecettes = document.getElementById("nlRecettes");
+  nlRecettes.textContent =
+    recipes?.length > 1
+      ? recipes.length + " recettes"
+      : recipes?.length + " recette";
   const container = document.getElementById("container");
-  const cards = recipes.map(generateRecipeCard).join(""); // Utilisation de map pour générer toutes les cartes
+  const cards = recipes?.map(generateRecipeCard).join(""); // Utilisation de map pour générer toutes les cartes
   container.innerHTML = cards;
 }
 
@@ -81,6 +86,8 @@ async function datas() {
   const recipes = await fetchRecipes();
   if (recipes.length > 0) {
     displayRecipes(recipes);
+    globalSearch(recipes);
+    getAllIngredients(recipes);
   } else {
     console.log("Aucune recette à afficher.");
   }
@@ -93,23 +100,21 @@ function openFilter() {
   const button = document.getElementById("ingredientButton");
   const AppareilsButton = document.getElementById("AppareilsButton");
   const UstensilsButton = document.getElementById("UstensilsButton");
+  const container = document.getElementById("container");
   const infos = document.querySelector(".infos");
   const Appareilsinfos = document.querySelector(".Appareilsinfos");
   const UstensilInfos = document.querySelector(".UstensilInfos");
   button.addEventListener("click", () => {
-    console.log("open");
     button.classList.toggle("chevron-active");
-    isOpen = true;
+    container.classList.toggle("container-cative");
     infos.classList.toggle("infos-active");
   });
   AppareilsButton.addEventListener("click", () => {
-    console.log("open");
     AppareilsButton.classList.toggle("chevron-active");
     isOpen = true;
     Appareilsinfos.classList.toggle("infos-active");
   });
   UstensilsButton.addEventListener("click", () => {
-    console.log("open");
     UstensilsButton.classList.toggle("chevron-active");
     isOpen = true;
     UstensilInfos.classList.toggle("infos-active");
@@ -122,9 +127,8 @@ openFilter();
  * filtrage a boucle natif
  */
 
-async function globalSearch() {
+async function globalSearch(recettes) {
   const globalInput = document.querySelector("#globalInput");
-  const recettes = await fetchRecipes();
   globalInput.addEventListener("input", (e) => {
     const criteria = e.target.value;
     if (criteria === "") {
@@ -134,82 +138,78 @@ async function globalSearch() {
 }
 globalSearch();
 
-function searchRecipesNative(recipes, query, ...criteria) {
-  if (query.length < 3 && criteria.length === 0) return [];
+function searchRecipesNative(recipes, criteriaTab) {
+  // Fusionner tous les criteriaTab en un seul tableau
+  const allCriteria = [].concat(...criteriaTab);
 
-  // Tableau pour stocker les résultats avec leur score
-  const scoredResults = [];
+  // Vérifier si les critères sont valides
+  if (allCriteria.length === 0) return [];
 
-  // Parcourir toutes les recettes
-  for (let i = 0; i < recipes.length; i++) {
-    const recipe = recipes[i];
-    let score = 0;
+  // Fonction pour normaliser les chaînes de texte
+  const normalizeText = (text) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
 
-    // Vérification du terme principal (query)
-    if (
-      recipe.name.toLowerCase().includes(query.toLowerCase()) ||
-      recipe.description.toLowerCase().includes(query.toLowerCase()) ||
-      recipe.ingredients.some((ing) =>
-        ing.ingredient.toLowerCase().includes(query.toLowerCase())
-      )
-    ) {
-      score += 1; // Ajouter un point si le query correspond
-    }
+  // Filtrer les recettes en fonction de tous les critères
+  const results = recipes.filter((recipe) => {
+    // Vérifier si la recette satisfait tous les critères
+    const matchesAllCriteria = allCriteria.every((criterion) => {
+      const normalizedCriterion = normalizeText(criterion);
 
-    // Vérification des critères supplémentaires
-    for (const criterion of criteria) {
-      const criterionLower = criterion.toLowerCase();
-
+      // Vérifier si le critère est présent dans le nom, la description ou les ingrédients
       const ingredientMatch = recipe.ingredients.some((ing) =>
-        ing.ingredient.toLowerCase().includes(criterionLower)
+        normalizeText(ing.ingredient).includes(normalizedCriterion)
       );
-      const nameMatch = recipe.name.toLowerCase().includes(criterionLower);
-      const descriptionMatch = recipe.description
-        .toLowerCase()
-        .includes(criterionLower);
+      const nameMatch = normalizeText(recipe.name).includes(
+        normalizedCriterion
+      );
+      const descriptionMatch = normalizeText(recipe.description).includes(
+        normalizedCriterion
+      );
 
-      // Ajouter un point pour chaque critère correspondant
-      if (ingredientMatch || nameMatch || descriptionMatch) {
-        score += 1;
-      }
-    }
+      return ingredientMatch || nameMatch || descriptionMatch;
+    });
 
-    // Ajouter la recette avec son score au tableau des résultats
-    if (score > 0) {
-      scoredResults.push({ recipe, score });
-    }
+    // La recette doit satisfaire tous les critères
+    return matchesAllCriteria;
+  });
+  // console.log(results);
+  if (results.length == 0) {
+    const nofound = document.getElementById("nofound");
+    const msg = `<h1 class="text-4xl">aucune recettes ne correspond à ${criteriaTab} !</h1>`;
+    nofound.innerHTML = msg;
+    console.log("aucune recettes de correspond !");
   }
 
-  // Trier les résultats par pertinence (score décroissant)
-  scoredResults.sort((a, b) => a.score - b.score);
-
-  // Extraire uniquement les recettes triées
-  const sortedRecipes = scoredResults.map((entry) => entry.recipe);
-
-  console.log("Résultats triés par pertinence :", sortedRecipes);
-  displayRecipes(sortedRecipes);
-  return sortedRecipes;
+  // Afficher les résultats et retourner la liste
+  console.log("Résultats correspondant à tous les critères :", results);
+  displayRecipes(results);
+  return results;
 }
 
-async function getAllIngredients() {
-  const recipes = await fetchRecipes();
+async function getAllIngredients(recipes) {
   let ingredientTagTable = [];
   let appareilTagTable = [];
   let ustensilTagTable = [];
 
   // Collecte des ingrédients
-  recipes.forEach((recipe) => {
+  // console.log("mes recettes :",recipes);
+
+  recipes?.forEach((recipe) => {
     recipe.ingredients.forEach((ingredient) => {
       ingredientTagTable.push(ingredient.ingredient);
     });
   });
+
   // Collecte des appareils
-  recipes.forEach((element) => {
+  recipes?.forEach((element) => {
     let appareils = element.appliance;
     appareilTagTable.push(appareils);
   });
   // Collecte des Ustensils
-  recipes.forEach((recipe) => {
+  recipes?.forEach((recipe) => {
     recipe.ustensils.forEach((ustensil) => {
       ustensilTagTable.push(ustensil);
     });
@@ -218,9 +218,9 @@ async function getAllIngredients() {
   // Suppression des doublons
   ingredientTagTable = [...new Set(ingredientTagTable)];
   appareilTagTable = [...new Set(appareilTagTable)];
-  console.log(ustensilTagTable);
+  // console.log(ustensilTagTable);
   ustensilTagTable = [...new Set(ustensilTagTable)];
-  console.log(ustensilTagTable);
+  // console.log(ustensilTagTable);
 
   // Sélection des éléments du DOM
   const ingredientSearch = document.querySelector("#ingredientSearch");
@@ -248,30 +248,94 @@ async function getAllIngredients() {
   const UstensilInfos = document.querySelector(".UstensilInfos");
 
   // Fonction pour afficher les ingrédients dans la liste
-  function updateIngredientList(filteredIngredients) {
+  const criteriaTab = [];
+  function updateIngredientList(filteredIngredients, recipes) {
+    // Générer la liste des ingrédients
     const result = filteredIngredients
-      .map((el, index) => {
-        return `<li class="py-[9px] pl-[16px] hover:bg-[#FFD15B] pb-0 ingredient" data-index="${index}">
-                    ${el}
-                  </li>`;
-      })
+      .map(
+        (el, index) =>
+          `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
+            ${el}
+          </li>`
+      )
       .join("");
 
+    // Injecter la liste dans le conteneur
+    const ingredientListe = document.getElementById("ingredientListe");
     ingredientListe.innerHTML = result;
+
+    // Conteneur des tags
+    const ingredientsTagContainer = document.getElementById(
+      "ingredientsTagContainer"
+    );
+
+    // Tableau pour stocker les critères sélectionnés
+    const criteriaTab = [];
 
     // Ajouter les gestionnaires d'événements pour chaque élément
     const li = ingredientListe.querySelectorAll(".ingredient");
+
     li.forEach((l) => {
       l.addEventListener("click", () => {
         const criteria = l.textContent.trim();
-        ingredientsTag.textContent = criteria;
-        button.classList.remove("chevron-active");
-        infos.classList.remove("infos-active");
-        tagingredient.classList.remove("hidden");
-        searchRecipesNative(recipes, criteria);
+
+        // Vérifier si le tag existe déjà pour éviter les doublons
+        if (!criteriaTab.includes(criteria)) {
+          criteriaTab.push(criteria);
+
+          // Mettre à jour les résultats de recherche
+          const filteredRecipes = searchRecipesNative(recipes, criteriaTab);
+          displayRecipes(filteredRecipes);
+
+          // Créer un nouveau tag pour l'ingrédient sélectionné
+          const tag = document.createElement("div");
+          tag.className =
+            "flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] border";
+          tag.id = `tag-${criteria}`;
+
+          // Contenu du tag
+          tag.innerHTML = `
+            <div class="flex justify-between items-center mx-[17px] my-4">
+              <h1 class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize">
+                ${criteria}
+              </h1>
+              <button class="ingredientTagClose" data-criteria="${criteria}">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          `;
+
+          // Ajouter le tag au conteneur
+          ingredientsTagContainer.appendChild(tag);
+
+          // Gestion de la suppression du tag
+          const closeButton = tag.querySelector(".ingredientTagClose");
+          closeButton.addEventListener("click", () => {
+            // Supprimer le tag du DOM
+            ingredientsTagContainer.removeChild(tag);
+
+            // Retirer le critère du tableau
+            const index = criteriaTab.indexOf(criteria);
+            if (index > -1) {
+              criteriaTab.splice(index, 1);
+
+              // Mettre à jour les résultats après suppression du tag
+              const updatedRecipes = searchRecipesNative(recipes, criteriaTab);
+              displayRecipes(updatedRecipes);
+              if (criteriaTab.length == 0) {
+                displayRecipes(recipes);
+              }
+            }
+
+            console.log("Tag supprimé :", criteriaTab);
+          });
+
+          console.log("Tags actifs :", criteriaTab);
+        }
       });
     });
   }
+
   // Fonction pour afficher les appareils dans la liste
   function updateAppareilList(filteredAppareils) {
     const result = filteredAppareils
@@ -289,13 +353,12 @@ async function getAllIngredients() {
 
     li.forEach((l) => {
       l.addEventListener("click", () => {
-        console.log("ok");
         const criteria = l.textContent.trim();
         AppareilsTag.textContent = criteria;
         button.classList.remove("chevron-active");
         Appareilsinfos.classList.remove("infos-active");
         tagAppareils.classList.remove("hidden");
-        searchRecipesNative(recipes, criteria);
+        // searchRecipesNative(recipes, criteria);
       });
     });
   }
@@ -316,35 +379,55 @@ async function getAllIngredients() {
 
     li.forEach((l) => {
       l.addEventListener("click", () => {
-        console.log("ok");
         const criteria = l.textContent.trim();
         UstensilsTag.textContent = criteria;
         button.classList.remove("chevron-active");
         UstensilInfos.classList.remove("infos-active");
         tagUstensils.classList.remove("hidden");
-        searchRecipesNative(recipes, criteria);
+        // searchRecipesNative(recipes, criteria);
       });
     });
   }
 
   // Initialiser la liste avec tous les ingrédients
-  updateIngredientList(ingredientTagTable);
+  updateIngredientList(ingredientTagTable, recipes);
   updateAppareilList(appareilTagTable);
   updateUstensilList(ustensilTagTable);
 
   // Recherche dynamique dans les ingrédients
-  ingredientSearch.addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase();
+  ingredientSearch.addEventListener("input", async (e) => {
+    const value = e.target.value.trim().toLowerCase();
+    console.log("Recherche d'ingrédients :", value);
+
+    // Récupérer les recettes (si non déjà chargé au préalable)
+    const recipes = await fetchRecipes();
+
     if (value !== "") {
+      // Filtrer les ingrédients en fonction de la saisie
       const filteredIngredients = ingredientTagTable.filter((el) =>
         el.toLowerCase().includes(value)
       );
-      updateIngredientList(filteredIngredients);
+
+      console.log("Ingrédients filtrés :", filteredIngredients);
+
+      // Mettre à jour la liste des ingrédients affichés
+      updateIngredientList(filteredIngredients, recipes);
+
+      // Filtrer les recettes en fonction des ingrédients sélectionnés
+      const filteredRecipes = searchRecipesNative(recipes, filteredIngredients);
+
+      // Afficher les recettes filtrées
+      displayRecipes(filteredRecipes);
     } else {
-      // Si aucun texte n'est saisi, afficher tous les ingrédients
-      updateIngredientList(ingredientTagTable);
+      // Si aucun texte n'est saisi, afficher toutes les recettes
+      console.log("Aucun ingrédient saisi, affichage de toutes les recettes.");
+      displayRecipes(recipes);
+
+      // Réinitialiser la liste des ingrédients
+      updateIngredientList(ingredientTagTable, recipes);
     }
   });
+
   // Recherche dynamique dans les appareils
   AppareilsSearch.addEventListener("input", (e) => {
     const value = e.target.value.toLowerCase();
@@ -355,7 +438,7 @@ async function getAllIngredients() {
       updateAppareilList(filteredAppareils);
     } else {
       // Si aucun texte n'est saisi, afficher tous les ingrédients
-      updateAppareilList(appareilTagTable);
+      // updateAppareilList(appareilTagTable);
     }
   });
   // Recherche dynamique dans les ustensils
@@ -368,67 +451,74 @@ async function getAllIngredients() {
       updateUstensilList(filteredustensils);
     } else {
       // Si aucun texte n'est saisi, afficher tous les ingrédients
-      updateUstensilList(ustensilTagTable);
+      // updateUstensilList(ustensilTagTable);
     }
   });
 
+  // ++++++++
   // Gestion du bouton de fermeture des tags ingredients
-  ingredientTagClose.addEventListener("click", () => {
+  ingredientTagClose?.addEventListener("click", () => {
+    console.log("ok");
+
     ingredientSearch.value = "";
-    updateIngredientList(ingredientTagTable);
+
+    searchRecipesNative(recipes, ingredientTagTable);
     tagingredient.classList.add("hidden");
     infos.classList.remove("infos-active");
-    console.log("ok");
     ingredientsTag.textContent = "";
+    criteriaTab = [];
+
     displayRecipes(recipes); // Affiche toutes les recettes
   });
   // Gestion du bouton de fermeture des tags appareils
   AppareilsTagClose.addEventListener("click", () => {
     AppareilsSearch.value = "";
-    updateIngredientList(ingredientTagTable);
+    // updateIngredientList(ingredientTagTable);
     tagAppareils.classList.add("hidden");
     Appareilsinfos.classList.remove("infos-active");
-    console.log("ok");
     AppareilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
   // Gestion du bouton de fermeture des tags ustensils
   UstensilsTagClose.addEventListener("click", () => {
     UstensilsSearch.value = "";
-    updateUstensilList(ustensilTagTable);
+    // updateUstensilList(ustensilTagTable);
     tagUstensils.classList.add("hidden");
     UstensilInfos.classList.remove("infos-active");
-    console.log("ok");
     UstensilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
-  // Gestion du bouton de fermeture des tags ingredients
+
+  // +++++++
+  // Gestion du bouton "Effacer critères de recherche - Ingrédients"
   tagCloser.addEventListener("click", () => {
+    // Réinitialiser le champ de recherche d'ingrédients
     ingredientSearch.value = "";
-    updateIngredientList(ingredientTagTable);
-    tagingredient.classList.add("hidden");
-    infos.classList.remove("infos-active");
-    console.log("ok");
-    ingredientsTag.textContent = "";
-    displayRecipes(recipes); // Affiche toutes les recettes
+
+    // Réinitialiser la liste des ingrédients affichés
+    updateIngredientList(ingredientTagTable, recipes);
+
+    // Réafficher toutes les recettes
+    displayRecipes(recipes);
+
+    console.log("Critères de recherche pour les ingrédients réinitialisés.");
   });
+
   // Gestion du bouton de fermeture des tags apareils
   tagCloserAppareil.addEventListener("click", () => {
     AppareilsSearch.value = "";
-    updateAppareilList(appareilTagTable);
+    // updateAppareilList(appareilTagTable);
     tagAppareils.classList.add("hidden");
     Appareilsinfos.classList.remove("infos-active");
-    console.log("ok");
     AppareilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });
   // Gestion du bouton de fermeture des tags apareils
   tagCloserUstensil.addEventListener("click", () => {
     AppareilsSearch.value = "";
-    updateAppareilList(appareilTagTable);
+    // updateAppareilList(appareilTagTable);
     tagUstensils.classList.add("hidden");
     UstensilInfos.classList.remove("infos-active");
-    console.log("ok");
     UstensilsTag.textContent = "";
     displayRecipes(recipes); // Affiche toutes les recettes
   });

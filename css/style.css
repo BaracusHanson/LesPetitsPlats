@@ -51,3 +51,14 @@ p {
 .infos-active {
   display: block;
 }
+
+i {
+  cursor: pointer;
+}
+li {
+  padding-left: 16px;
+}
+
+.container-cative {
+  margin-top: 300px;
+}

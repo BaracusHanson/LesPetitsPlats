@@ -87,10 +87,8 @@
           class="box-content w-[195px] flex gap-[66px] absolute top-0 left-0 z-40"
         >
           <!-- critere de filtrage -->
-          <div class="flex flex-col gap-[21px]">
-            <div
-              class="flex flex-col gap-[14px] bg-white rounded-[11px] relative"
-            >
+          <div class="flex flex-col gap-[21px] relative ">
+            <div class="flex flex-col gap-[14px] bg-white rounded-[11px]">
               <div
                 class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
               >
@@ -103,16 +101,21 @@
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
+
               <div class="hidden infos">
                 <!-- barre de recherche -->
                 <div
                   class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
                 >
                   <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full" id="ingredientSearch"
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    id="ingredientSearch"
                   />
                   <div class="flex items-center justify-center text-xs">
-                    <i class="text-[#7a7a7a] fa-solid fa-xmark" id="tagCloser"></i>
+                    <i
+                      class="text-[#7a7a7a] fa-solid fa-xmark"
+                      id="tagCloser"
+                    ></i>
                     <div class="m-2 text-[#7a7a7a] flex-between-center">
                       <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
@@ -120,27 +123,29 @@
                 </div>
                 <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
                 <ul
-                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer w-full mt-[37px]"
+                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer mt-[37px] "
                   id="ingredientListe"
                 ></ul>
               </div>
             </div>
-            <!-- tags -->
-            <div
-              class=" flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden" id="tagingredient"
-            >
-              <div
-                class="flex justify-between items-center  mx-[17px] my-4"
+            <div id="ingredientsTagContainer" class="">
+              <!-- tags -->
+              <!-- <div
+                class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
+                id="tagingredient"
               >
-                <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize" id="ingredientsTag"
-                >
-                  ingredients
-                </h1>
-                <button id="ingredientTagClose">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </div>
+                <div class="flex justify-between items-center mx-[17px] my-4">
+                  <h1
+                    class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
+                    id="ingredientsTag"
+                  >
+                    ingredients
+                  </h1>
+                  <button id="ingredientTagClose">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div> -->
             </div>
           </div>
           <!-- critere de filtrage -->
@@ -166,10 +171,14 @@
                   class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
                 >
                   <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full" id="AppareilsSearch"
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    id="AppareilsSearch"
                   />
                   <div class="flex items-center justify-center text-xs">
-                    <i class="text-[#7a7a7a] fa-solid fa-xmark" id="tagCloserAppareil"></i>
+                    <i
+                      class="text-[#7a7a7a] fa-solid fa-xmark"
+                      id="tagCloserAppareil"
+                    ></i>
                     <div class="m-2 text-[#7a7a7a] flex-between-center">
                       <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
@@ -184,13 +193,13 @@
             </div>
             <!-- tags -->
             <div
-              class=" flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden" id="tagAppareils"
+              class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
+              id="tagAppareils"
             >
-              <div
-                class="flex justify-between items-center  mx-[17px] my-4"
-              >
+              <div class="flex justify-between items-center mx-[17px] my-4">
                 <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize" id="AppareilsTag"
+                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
+                  id="AppareilsTag"
                 >
                   Appareils
                 </h1>
@@ -223,10 +232,14 @@
                   class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
                 >
                   <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full" id="UstensilsSearch"
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    id="UstensilsSearch"
                   />
                   <div class="flex items-center justify-center text-xs">
-                    <i class="text-[#7a7a7a] fa-solid fa-xmark" id="tagCloserUstensil"></i>
+                    <i
+                      class="text-[#7a7a7a] fa-solid fa-xmark"
+                      id="tagCloserUstensil"
+                    ></i>
                     <div class="m-2 text-[#7a7a7a] flex-between-center">
                       <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
@@ -240,14 +253,15 @@
               </div>
             </div>
             <!-- tags -->
+
             <div
-              class=" flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden" id="tagUstensils"
+              class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
+              id="tagUstensils"
             >
-              <div
-                class="flex justify-between items-center  mx-[17px] my-4"
-              >
+              <div class="flex justify-between items-center mx-[17px] my-4">
                 <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize" id="UstensilsTag"
+                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
+                  id="UstensilsTag"
                 >
                   ustensils
                 </h1>
@@ -259,7 +273,7 @@
           </div>
         </div>
         <div class="flex items-center justify-end w-full h-full">
-          <div class="font-anton">1500 recettes</div>
+          <div class="font-anton" id="nlRecettes"></div>
         </div>
       </section>
 
@@ -354,6 +368,10 @@
         </div> -->
       </div>
     </main>
+    <div id="nofound" class="flex items-center justify-center w-full bg-[#EDEDED] text-4xl">
+      <!-- <h1 class="text-4xl">aucune recettes ne correspond !</h1> -->
+    </div>
+    
     <!-- <script src="./js/recettes.js"></script> -->
     <script src="./js/index.js"></script>
   </body>
