@@ -1,7 +1,7 @@
 export function addTag(container, tagText, criteriaTab, updateCallback) {
-  const tag = document.createElement("div");
-  tag.className = "tag";
-  tag.textContent = tagText;
+  // const tag = document.createElement("div");
+  // tag.className = "tag";
+  // tag.textContent = tagText;
 
   // Bouton de suppression
   const closeButton = document.createElement("button");
@@ -15,6 +15,6 @@ export function addTag(container, tagText, criteriaTab, updateCallback) {
     }
   });
 
-  tag.appendChild(closeButton);
-  container.appendChild(tag);
+  // tag.appendChild(closeButton);
+  // container.appendChild(tag);
 }
