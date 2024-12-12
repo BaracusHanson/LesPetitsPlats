@@ -249,6 +249,9 @@ async function getAllIngredients(recipes) {
 
   // Fonction pour afficher les ingrédients dans la liste
   const criteriaTab = [];
+
+
+  // ++++++++
   function updateIngredientList(filteredIngredients, recipes) {
     // Générer la liste des ingrédients
     const result = filteredIngredients
@@ -394,6 +397,7 @@ async function getAllIngredients(recipes) {
   updateAppareilList(appareilTagTable);
   updateUstensilList(ustensilTagTable);
 
+  // +++++++
   // Recherche dynamique dans les ingrédients
   ingredientSearch.addEventListener("input", async (e) => {
     const value = e.target.value.trim().toLowerCase();

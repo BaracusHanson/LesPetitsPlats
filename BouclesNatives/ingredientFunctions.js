@@ -1,0 +1,1 @@
+// Gère les fonctionnalités liées aux ingrédients
