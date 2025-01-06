@@ -2,63 +2,59 @@ import { searchRecipesFunctional } from "../filter.js";
 import { displayRecipes } from "../recipeCards.js";
 import { criteriaTab } from "./main.js";
 
-export async function getAllIngredients(recipes) {
-  const ingredientsTagCloser = document.getElementById("ingredientsTagCloser");
+export async function getAllUstensils(recipes) {
+  const ustensilesTagCloser = document.getElementById("ustensilesTagCloser");
 
-  // Récupération des ingrédients uniques
-  const ingredientTagTable = [
-    ...new Set(
-      recipes.flatMap((recipe) =>
-        recipe.ingredients.map((ingredient) => ingredient.ingredient)
-      )
-    ),
+  // Récupération des appareils uniques
+  const ustensilsTagTable = [
+    ...new Set(recipes.flatMap((recipe) => recipe.ustensils)),
   ];
 
   // Met à jour la liste des ingrédients affichés
-  updateIngredientList(ingredientTagTable, recipes);
+  updateUstensilList(ustensilsTagTable, recipes);
 
   // Réinitialiser l'input et afficher la liste par défaut des ingrédients
-  ingredientsTagCloser.addEventListener("click", () => {
-    const ingredientSearch = document.querySelector("#ingredientSearch");
-    ingredientSearch.value = "";
-    updateIngredientList(ingredientTagTable, recipes);
+  ustensilesTagCloser.addEventListener("click", () => {
+    const ustensilesSearch = document.querySelector("#ustensilesSearch");
+    ustensilesSearch.value = "";
+    updateUstensilList(ustensilsTagTable, recipes);
   });
 }
 
 // Met à jour la liste des ingrédients dans le DOM
-export function updateIngredientList(filteredIngredients, recipes) {
-  const ingredientListe = document.getElementById("ingredientListe");
-  const ingredientsTagContainer = document.getElementById(
-    "ingredientsTagContainer"
+export function updateUstensilList(filteredUstensils, recipes) {
+  const ustensilesListe = document.getElementById("ustensilesListe");
+  const ustensilesTagContainer = document.getElementById(
+    "ustensilesTagContainer"
   );
 
   // Générer la liste des ingrédients
-  ingredientListe.innerHTML = filteredIngredients
+  ustensilesListe.innerHTML = filteredUstensils
     .map(
       (el, index) =>
-        `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
+        `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] appareil capitalize" data-index="${index}">
           ${el}
         </li>`
     )
     .join("");
 
   // Ajouter des gestionnaires d'événements pour chaque ingrédient
-  ingredientListe.querySelectorAll(".ingredient").forEach((element) => {
+  ustensilesListe.querySelectorAll(".appareil").forEach((element) => {
     element.addEventListener("click", () =>
-      handleIngredientClick(element, recipes, ingredientsTagContainer)
+        handleUstensilClick(element, recipes, ustensilesTagContainer)
     );
   });
 
   // Gestion de la recherche dynamique
-  handleDynamicSearch(filteredIngredients, recipes, ingredientsTagContainer);
+  handleDynamicSearch(filteredUstensils, recipes, ustensilesTagContainer);
 }
 
 // Gère les clics sur un ingrédient
-function handleIngredientClick(element, recipes, container) {
+function handleUstensilClick(element, recipes, container) {
   const criteria = element.textContent.trim();
-  const infos = document.querySelector(".infos");
+  const ustensilesInfos = document.querySelector(".ustensilesInfos");
 
-  infos.classList.remove("infos-active");
+  ustensilesInfos.classList.remove("infos-active");
   if (!criteriaTab.includes(criteria)) {
     // Ajouter l'ingrédient sélectionné à `criteriaTab`
     criteriaTab.push(criteria);
@@ -74,21 +70,21 @@ function handleIngredientClick(element, recipes, container) {
 }
 
 // Gère la recherche dynamique dans les ingrédients
-function handleDynamicSearch(filteredIngredients, recipes, container) {
-  const ingredientSearch = document.querySelector("#ingredientSearch");
+function handleDynamicSearch(filteredUstensils, recipes, container) {
+  const ustensilesSearch = document.querySelector("#ustensilesSearch");
 
-  ingredientSearch.addEventListener("input", (e) => {
+  ustensilesSearch.addEventListener("input", (e) => {
     const value = e.target.value.trim().toLowerCase();
 
     if (value !== "" && value.length >= 3) {
       // Filtrer les ingrédients affichés
-      const filteredIngredient = filteredIngredients.filter((el) =>
+      const filteredUstensil = filteredUstensils.filter((el) =>
         el.toLowerCase().includes(value)
       );
 
       // Mettre à jour la liste affichée
-      const ingredientListe = document.getElementById("ingredientListe");
-      ingredientListe.innerHTML = filteredIngredient
+      const ustensilesListe = document.getElementById("ustensilesListe");
+      ustensilesListe.innerHTML = filteredUstensil
         .map(
           (el, index) =>
             `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
@@ -97,15 +93,15 @@ function handleDynamicSearch(filteredIngredients, recipes, container) {
         )
         .join("");
 
-      // Ajouter des gestionnaires d'événements pour chaque ingrédient filtré
-      ingredientListe.querySelectorAll(".ingredient").forEach((element) => {
+      // Ajouter des gestionnaires d'événements pour chaque appareil filtré
+      ustensilesListe.querySelectorAll(".ingredient").forEach((element) => {
         element.addEventListener("click", () =>
-          handleIngredientClick(element, recipes, container)
+            handleUstensilClick(element, recipes, container)
         );
       });
     } else {
       // Réinitialiser la liste si aucune recherche ou saisie insuffisante
-      updateIngredientList(filteredIngredients, recipes);
+      updateUstensilList(filteredUstensils, recipes);
     }
   });
 }
@@ -121,14 +117,14 @@ function createTag(criteria, recipes, container) {
       <h1 class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize">
         ${criteria}
       </h1>
-      <button class="ingredientTagClose" data-criteria="${criteria}">
+      <button class="appareilTagClose" data-criteria="${criteria}">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
   `;
 
   // Ajouter un gestionnaire pour supprimer le tag
-  tag.querySelector(".ingredientTagClose").addEventListener("click", () => {
+  tag.querySelector(".appareilTagClose").addEventListener("click", () => {
     container.removeChild(tag);
 
     const index = criteriaTab.indexOf(criteria);
