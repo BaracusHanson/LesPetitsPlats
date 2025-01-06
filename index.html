@@ -87,7 +87,7 @@
           class="box-content w-[195px] flex gap-[66px] absolute top-0 left-0 z-40"
         >
           <!-- critere de filtrage -->
-          <div class="flex flex-col gap-[21px] relative ">
+          <div class="flex flex-col gap-[21px] relative">
             <div class="flex flex-col gap-[14px] bg-white rounded-[11px]">
               <div
                 class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
@@ -123,7 +123,7 @@
                 </div>
                 <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
                 <ul
-                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer mt-[37px] "
+                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer mt-[37px]"
                   id="ingredientListe"
                 ></ul>
               </div>
@@ -368,11 +368,18 @@
         </div> -->
       </div>
     </main>
-    <div id="nofound" class="flex items-center justify-center w-full bg-[#EDEDED] text-4xl">
+    <div
+      id="nofound"
+      class="flex items-center justify-center w-full bg-[#EDEDED] text-4xl"
+    >
       <!-- <h1 class="text-4xl">aucune recettes ne correspond !</h1> -->
     </div>
-    
+
     <!-- <script src="./js/recettes.js"></script> -->
-    <script src="./js/index.js"></script>
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/ingredients.js"></script>
+    <script type="module" src="./fetchRecipes.js"></script>
+    <script type="module" src="./filter.js"></script>
+    <script type="module" src="./recipeCards.js"></script>
   </body>
 </html>
