@@ -19,7 +19,6 @@ async function init() {
 
     if (query.length >= 3) {
       criteriaTab.push(query);
-      console.log(criteriaTab);
     } else {
       // Si la recherche est inférieure à 3 caractères, vider criteriaTab
       criteriaTab = [];
@@ -28,6 +27,13 @@ async function init() {
     // Mettre à jour les recettes affichées en fonction de criteriaTab
     const filteredRecipes = searchRecipesFunctional(recipesCache, criteriaTab);
     displayRecipes(filteredRecipes);
+
+    // Mettre à jour les listes de filtres (ingrédients, appareils, ustensiles)
+    if (criteriaTab.length > 0) {
+      getAllIngredients(filteredRecipes);
+      getAllDevices(filteredRecipes);
+      getAllUstensils(filteredRecipes);
+    }
   });
 
   getAllIngredients(recipesCache);
@@ -55,8 +61,8 @@ function openFilter() {
     AppareilsButton.classList.toggle("chevron-active");
     appareilsInfos.classList.toggle("infos-active");
   });
-    UstensilsButton.addEventListener("click", () => {
-      UstensilsButton.classList.toggle("chevron-active");
-      UstensilInfos.classList.toggle("infos-active");
-    });
+  UstensilsButton.addEventListener("click", () => {
+    UstensilsButton.classList.toggle("chevron-active");
+    UstensilInfos.classList.toggle("infos-active");
+  });
 }
