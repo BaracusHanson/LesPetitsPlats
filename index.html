@@ -6,6 +6,7 @@
     <title>Les Petits Plats</title>
     <!-- Lien vers votre fichier CSS personnalisé qui importe Tailwind -->
     <link rel="stylesheet" href="./dist/styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
@@ -21,35 +22,8 @@
         class="z-50 flex items-end gap-2 w-[207px] absolute top-[65px] left-[69px] transition-transform duration-300 ease-out hover:scale-110 active:scale-95"
         aria-label="Retour à la page d'accueil"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="286"
-          height="40"
-          viewBox="0 0 286 40"
-          fill="none"
-        >
-          <path
-            d="M0 39.6429V0.357143H7.85714V32.9464H15.9375V39.6429H0Z"
-            fill="white"
-          />
-          <path
-            d="M18.1696 39.6429V0.357143H33.8839V7.94643H26.1607V15.6027H33.5714V22.9911H26.1607V31.9866H34.3973V39.6429H18.1696Z"
-            fill="white"
-          />
-          <!-- Ajoutez ici d'autres <path> si nécessaire -->
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="36"
-          height="34"
-          viewBox="0 0 36 34"
-          fill="none"
-        >
-          <path
-            d="M35.7829 16.8175C35.7829 26.1099 27.9657 33.6429 18.3226 33.6429C8.67955 33.6429 0.862305 26.1099 0.862305 16.8175C0.862305 7.52505 8.67955 -0.00793648 18.3226 -0.00793648C27.9657 -0.00793648 35.7829 7.52505 35.7829 16.8175Z"
-            fill="white"
-          />
-        </svg>
+        <img src="./assets/Les petits plats.png" alt="" />
+        <img src="./assets/Group 3.png" alt="" />
       </a>
 
       <h1
@@ -67,7 +41,7 @@
           placeholder="Rechercher une recette, un ingrédient, ..."
         />
         <div class="flex items-center justify-center gap-6 text-2xl">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark" id="deleteMainSearch"></i>
           <div
             class="w-[51px] h-[52px] bg-[#1a1a1a] rounded-[10px] m-[10px] text-white text-[1.5rem] flex-between-center hover:bg-[#FFD15B]"
           >
@@ -223,7 +197,7 @@
             <div id="ustensilesTagContainer"></div>
           </div>
         </div>
-        <div class="flex items-center justify-end w-full h-full">
+        <div class="flex items-center justify-end w-full h-full text-[1.3rem]">
           <div class="font-anton" id="nlRecettes"></div>
         </div>
       </section>
@@ -231,13 +205,10 @@
       <!-- grid cards -->
       <div class="grid grid-cols-3 gap-x-[48px] gap-y-[68px]" id="container">
         <!-- cards -->
-
       </div>
+      <div id="nofound" class="w-full bg-[#EDEDED] text-2xl"></div>
     </main>
-    <!-- <div
-      id="nofound"
-      class="flex items-center justify-center w-full bg-[#EDEDED] text-4xl"
-    >aucune recette trouvé</div> -->
+
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>

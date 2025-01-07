@@ -14,22 +14,51 @@ async function init() {
   openFilter();
   // Gestion de l'entrée utilisateur pour la recherche globale
   const searchInput = document.getElementById("globalInput");
+  const deleteMainSearch = document.getElementById("deleteMainSearch");
+  const nofound = document.getElementById("nofound");
+  function reset() {
+    deleteMainSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      nofound.classList.add("innactive");
+      searchRecipesFunctional(recipesCache, criteriaTab);
+      displayRecipes(recipesCache);
+    });
+  }
   searchInput.addEventListener("input", (e) => {
     const query = e.target.value.trim();
 
     if (query.length >= 3) {
-      criteriaTab.push(query);
+      if (!criteriaTab.includes(query)) {
+        criteriaTab.push(query);
+      }
     } else {
       // Si la recherche est inférieure à 3 caractères, vider criteriaTab
       criteriaTab = [];
+      displayRecipes(recipesCache);
     }
 
     // Mettre à jour les recettes affichées en fonction de criteriaTab
     const filteredRecipes = searchRecipesFunctional(recipesCache, criteriaTab);
-    displayRecipes(filteredRecipes);
+
+    // Si aucune recette ne correspond
+
+    if (filteredRecipes.length === 0) {
+      nofound.classList.remove("innactive");
+      const noResultsMessage = `
+      <div class="no-results flex flex-col items-center justify-center font-manrope">
+        <p>Aucune recette ne contient « <strong>${query}</strong> ».</p>
+        <p>Vous pouvez essayer des recherches comme « tarte aux pommes », « poisson », etc.</p>
+      </div>
+    `;
+      const container = document.getElementById("nofound");
+      container.innerHTML = noResultsMessage;
+    } else {
+      nofound.classList.add("innactive");
+    }
 
     // Mettre à jour les listes de filtres (ingrédients, appareils, ustensiles)
     if (criteriaTab.length > 0) {
+      displayRecipes(filteredRecipes);
       getAllIngredients(filteredRecipes);
       getAllDevices(filteredRecipes);
       getAllUstensils(filteredRecipes);
@@ -39,6 +68,7 @@ async function init() {
   getAllIngredients(recipesCache);
   getAllDevices(recipesCache);
   getAllUstensils(recipesCache);
+  reset();
 }
 
 init();

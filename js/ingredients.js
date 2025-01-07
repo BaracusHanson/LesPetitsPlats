@@ -118,7 +118,7 @@ function createTag(criteria, recipes, container) {
 
   tag.innerHTML = `
     <div class="flex justify-between items-center mx-[17px] my-4">
-      <h1 class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize">
+      <h1 class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize" id="tag">
         ${criteria}
       </h1>
       <button class="ingredientTagClose" data-criteria="${criteria}">
