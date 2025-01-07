@@ -6,6 +6,12 @@
     <title>Les Petits Plats</title>
     <!-- Lien vers votre fichier CSS personnalisé qui importe Tailwind -->
     <link rel="stylesheet" href="./dist/styles.css" />
+    
+    <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Anton&display=swap"
+    rel="stylesheet"
+  >
+  
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
@@ -21,35 +27,8 @@
         class="z-50 flex items-end gap-2 w-[207px] absolute top-[65px] left-[69px] transition-transform duration-300 ease-out hover:scale-110 active:scale-95"
         aria-label="Retour à la page d'accueil"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="286"
-          height="40"
-          viewBox="0 0 286 40"
-          fill="none"
-        >
-          <path
-            d="M0 39.6429V0.357143H7.85714V32.9464H15.9375V39.6429H0Z"
-            fill="white"
-          />
-          <path
-            d="M18.1696 39.6429V0.357143H33.8839V7.94643H26.1607V15.6027H33.5714V22.9911H26.1607V31.9866H34.3973V39.6429H18.1696Z"
-            fill="white"
-          />
-          <!-- Ajoutez ici d'autres <path> si nécessaire -->
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="36"
-          height="34"
-          viewBox="0 0 36 34"
-          fill="none"
-        >
-          <path
-            d="M35.7829 16.8175C35.7829 26.1099 27.9657 33.6429 18.3226 33.6429C8.67955 33.6429 0.862305 26.1099 0.862305 16.8175C0.862305 7.52505 8.67955 -0.00793648 18.3226 -0.00793648C27.9657 -0.00793648 35.7829 7.52505 35.7829 16.8175Z"
-            fill="white"
-          />
-        </svg>
+        <img src="./assets/Les petits plats.png" alt="" />
+        <img src="./assets/Group 3.png" alt="" />
       </a>
 
       <h1
@@ -67,7 +46,7 @@
           placeholder="Rechercher une recette, un ingrédient, ..."
         />
         <div class="flex items-center justify-center gap-6 text-2xl">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark" id="deleteMainSearch"></i>
           <div
             class="w-[51px] h-[52px] bg-[#1a1a1a] rounded-[10px] m-[10px] text-white text-[1.5rem] flex-between-center hover:bg-[#FFD15B]"
           >
@@ -83,12 +62,12 @@
       <section
         class="w-full h-[113px] flex justify-between items-center pb-[55px] relative box-border mb-[86px]"
       >
-        <div
-          class="box-content w-[195px] flex gap-[66px] absolute top-0 left-0 z-40"
-        >
+        <div class="box-content w-[195px] flex gap-[66px] absolute top-0 z-40">
           <!-- critere de filtrage -->
-          <div class="flex flex-col gap-[21px] relative">
-            <div class="flex flex-col gap-[14px] bg-white rounded-[11px]">
+          <div class="flex flex-col gap-[21px]">
+            <div
+              class="flex flex-col gap-[14px] bg-white rounded-[11px] w-[198px]"
+            >
               <div
                 class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
               >
@@ -114,7 +93,7 @@
                   <div class="flex items-center justify-center text-xs">
                     <i
                       class="text-[#7a7a7a] fa-solid fa-xmark"
-                      id="tagCloser"
+                      id="ingredientsTagCloser"
                     ></i>
                     <div class="m-2 text-[#7a7a7a] flex-between-center">
                       <i class="fa-solid fa-magnifying-glass"></i>
@@ -128,30 +107,12 @@
                 ></ul>
               </div>
             </div>
-            <div id="ingredientsTagContainer" class="">
-              <!-- tags -->
-              <!-- <div
-                class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
-                id="tagingredient"
-              >
-                <div class="flex justify-between items-center mx-[17px] my-4">
-                  <h1
-                    class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
-                    id="ingredientsTag"
-                  >
-                    ingredients
-                  </h1>
-                  <button id="ingredientTagClose">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                </div>
-              </div> -->
-            </div>
+            <div id="ingredientsTagContainer"></div>
           </div>
           <!-- critere de filtrage -->
-          <div class="flex flex-col gap-[21px]">
+          <div class="flex flex-col gap-[21px] relative">
             <div
-              class="flex flex-col gap-[14px] bg-white rounded-[11px] relative"
+              class="flex flex-col gap-[14px] bg-white rounded-[11px] w-[198px]"
             >
               <div
                 class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
@@ -159,120 +120,89 @@
                 <h1
                   class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
                 >
-                  Appareils
+                  appareils
                 </h1>
-                <button id="AppareilsButton">
+                <button id="appareilsButton">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
-              <div class="hidden Appareilsinfos">
-                <!-- barre de recherche -->
-                <div
-                  class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
-                >
-                  <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
-                    id="AppareilsSearch"
-                  />
-                  <div class="flex items-center justify-center text-xs">
-                    <i
-                      class="text-[#7a7a7a] fa-solid fa-xmark"
-                      id="tagCloserAppareil"
-                    ></i>
-                    <div class="m-2 text-[#7a7a7a] flex-between-center">
-                      <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                  </div>
-                </div>
-                <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
-                <ul
-                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer w-full mt-[37px]"
-                  id="AppareilsListe"
-                ></ul>
-              </div>
-            </div>
-            <!-- tags -->
-            <div
-              class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
-              id="tagAppareils"
-            >
-              <div class="flex justify-between items-center mx-[17px] my-4">
-                <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
-                  id="AppareilsTag"
-                >
-                  Appareils
-                </h1>
-                <button id="AppareilsTagClose">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- critere de filtrage -->
-          <div class="flex flex-col gap-[21px]">
-            <div
-              class="flex flex-col gap-[14px] bg-white rounded-[11px] relative"
-            >
-              <div
-                class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
-              >
-                <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
-                >
-                  Ustensils
-                </h1>
-                <button id="UstensilsButton">
-                  <i class="fa-solid fa-chevron-down"></i>
-                </button>
-              </div>
-              <div class="hidden UstensilInfos">
-                <!-- barre de recherche -->
-                <div
-                  class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
-                >
-                  <input
-                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
-                    id="UstensilsSearch"
-                  />
-                  <div class="flex items-center justify-center text-xs">
-                    <i
-                      class="text-[#7a7a7a] fa-solid fa-xmark"
-                      id="tagCloserUstensil"
-                    ></i>
-                    <div class="m-2 text-[#7a7a7a] flex-between-center">
-                      <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                  </div>
-                </div>
-                <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
-                <ul
-                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer w-full mt-[37px]"
-                  id="UstensilsListe"
-                ></ul>
-              </div>
-            </div>
-            <!-- tags -->
 
-            <div
-              class="flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] relative border hidden"
-              id="tagUstensils"
-            >
-              <div class="flex justify-between items-center mx-[17px] my-4">
-                <h1
-                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
-                  id="UstensilsTag"
+              <div class="hidden appareilsInfos">
+                <!-- barre de recherche -->
+                <div
+                  class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
                 >
-                  ustensils
-                </h1>
-                <button id="UstensilsTagClose">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
+                  <input
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    id="appareilsSearch"
+                  />
+                  <div class="flex items-center justify-center text-xs">
+                    <i
+                      class="text-[#7a7a7a] fa-solid fa-xmark"
+                      id="appareilsTagCloser"
+                    ></i>
+                    <div class="m-2 text-[#7a7a7a] flex-between-center">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                  </div>
+                </div>
+                <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
+                <ul
+                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer mt-[37px]"
+                  id="appareilsListe"
+                ></ul>
               </div>
             </div>
+            <div id="appareilsTagContainer"></div>
+          </div>
+          <!-- critere de filtrage -->
+          <div class="flex flex-col gap-[21px] relative">
+            <div
+              class="flex flex-col gap-[14px] bg-white rounded-[11px] w-[198px]"
+            >
+              <div
+                class="flex justify-between items-center gap-[63px] mx-[17px] my-4"
+              >
+                <h1
+                  class="text-base font-semibold font-manrope text-[#1B1B1B] capitalize"
+                >
+                  ustensiles
+                </h1>
+                <button id="ustensilesButton">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+
+              <div class="hidden ustensilesInfos">
+                <!-- barre de recherche -->
+                <div
+                  class="z-50 flex items-center justify-between mx-4 bg-white border rounded-md w-[163px] mb-6 absolute"
+                >
+                  <input
+                    class="text-[#7a7a7a] text-base font-normal font-manrope rounded-[0px] ml-2 outline-none h-9 w-full"
+                    id="ustensilesSearch"
+                  />
+                  <div class="flex items-center justify-center text-xs">
+                    <i
+                      class="text-[#7a7a7a] fa-solid fa-xmark"
+                      id="ustensilesTagCloser"
+                    ></i>
+                    <div class="m-2 text-[#7a7a7a] flex-between-center">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                  </div>
+                </div>
+                <!-- Les éléments ajoutés ici augmentent la hauteur automatiquement -->
+                <ul
+                  class="h-[202px] overflow-y-scroll scrollbar-hide pb-[15px] cursor-pointer mt-[37px]"
+                  id="ustensilesListe"
+                ></ul>
+              </div>
+            </div>
+            <div id="ustensilesTagContainer"></div>
           </div>
         </div>
-        <div class="flex items-center justify-end w-full h-full">
+        <div class="flex items-center justify-end w-full h-full text-[1.3rem]">
           <div class="font-anton" id="nlRecettes"></div>
         </div>
       </section>
@@ -280,110 +210,11 @@
       <!-- grid cards -->
       <div class="grid grid-cols-3 gap-x-[48px] gap-y-[68px]" id="container">
         <!-- cards -->
-        <!-- <div
-          class="bg-white rounded-[21px] overflow-hidden h-[731px] [box-shadow:0px_4px_34px_30px_rgba(0,0,0,0.04)]"
-        >
-          <div class="w-full h-[253px] mb-8 relative">
-            <img
-              src="./assets/Images/Recette01.jpg"
-              alt=""
-              class="w-full h-[253px] object-cover object-center"
-            />
-            <div
-              class="w-[63px] h-[26px] absolute top-[21px] right-[22px] bg-[#FFD15B] px-15px py-[5px] flex justify-center items-center font-manrope text-[#1B1B1B] text-[12px] rounded-[14px]"
-            >
-              10min
-            </div>
-          </div>
-          <h2
-            class="font-anton text-[18px] text-[#000] mb-[29px] capitalize w-full text-start pl-[25px]"
-          >
-            limonade de coco
-          </h2>
-          <div class="px-[25px] w-full h-[329px] mb-[61px]">
-            <section class="flex flex-col gap-8">
-              <div class="flex flex-col gap-[15px]">
-                <h3
-                  class="uppercase font-manrope font-[700] text-[#7A7A7A] text-[12px] tracking-widest"
-                >
-                  recette
-                </h3>
-                <p class="font-manrope text-[#1B1B1B] text-[14px] text-[400]">
-                  Mettre les glaçons à votre goût dans le blender, ajouter le
-                  lait, la crème de coco, le jus de 2 citrons et le sucre. Mixer
-                  jusqu'à avoir la consistence désirée.
-                </p>
-              </div>
-              <div class="flex flex-col gap-[15px]">
-                <h3
-                  class="uppercase font-manrope font-[700] text-[#7A7A7A] text-[12px] tracking-widest"
-                >
-                  Ingrédients
-                </h3>
-                <ul class="grid grid-cols-2 gap-y-[21px]">
-                  <li
-                    class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold"
-                  >
-                    lait de coco
-                    <span class="text-[#7A7A7A] font-medium text-[0.8rem]"
-                      >400ml</span
-                    >
-                  </li>
-                  <li
-                    class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold"
-                  >
-                    lait de coco
-                    <span class="text-[#7A7A7A] font-medium text-[0.8rem]"
-                      >400ml</span
-                    >
-                  </li>
-                  <li
-                    class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold"
-                  >
-                    lait de coco
-                    <span class="text-[#7A7A7A] font-medium text-[0.8rem]"
-                      >400ml</span
-                    >
-                  </li>
-                  <li
-                    class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold"
-                  >
-                    lait de coco
-                    <span class="text-[#7A7A7A] font-medium text-[0.8rem]"
-                      >400ml</span
-                    >
-                  </li>
-                  <li
-                    class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold"
-                  >
-                    lait de coco
-                    <span class="text-[#7A7A7A] font-medium text-[0.8rem]"
-                      >400ml</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </section>
-          </div>
-        </div> -->
       </div>
+      <div id="nofound" class="w-full bg-[#EDEDED] text-2xl"></div>
     </main>
-    <div
-      id="nofound"
-      class="flex items-center justify-center w-full bg-[#EDEDED] text-4xl"
-    >
-      <!-- <h1 class="text-4xl">aucune recettes ne correspond !</h1> -->
-    </div>
 
-    <!-- <script src="./js/recettes.js"></script> -->
-    <script type="module" src="./js/main.js"></script>
-    <script type="module" src="./BouclesNatives/fetchRecipes.js"></script>
-    <script type="module" src="./BouclesNatives/recipeCards.js"></script>
-    <script type="module" src="./BouclesNatives/filters.js"></script>
-    <script type="module" src="./BouclesNatives/tags.js"></script>
-    <script type="module" src="./BouclesNatives/updateFilterTags.js"></script>
-    <script type="module" src="./js/openFilter.js"></script>
-    <script type="module" src="./BouclesNatives/fetchAllCriteria.js"></script>
-    <script type="module" src="./BouclesNatives/updateFilterTags.js"></script>
+    <script type="module" src="./js/index.js"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
   </body>
 </html>

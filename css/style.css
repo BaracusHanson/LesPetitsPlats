@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "Manrope";
   src: url("../assets/Manrope/static/Manrope-Regular.ttf") format("truetype");
@@ -12,9 +16,7 @@
   font-style: normal;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 #mainImg {
   background-image: url(../assets/Logo.jpg);
@@ -22,7 +24,7 @@
 
 @layer utilities {
   .flex-between-center {
-    @apply flex justify-center items-center;
+    @apply flex items-center justify-center;
   }
 }
 
@@ -30,6 +32,7 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -55,10 +58,15 @@ p {
 i {
   cursor: pointer;
 }
+
 li {
   padding-left: 16px;
 }
 
 .container-cative {
   margin-top: 300px;
+}
+
+.innactive {
+  display: none;
 }
