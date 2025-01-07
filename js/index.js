@@ -62,6 +62,11 @@ async function init() {
       getAllIngredients(filteredRecipes);
       getAllDevices(filteredRecipes);
       getAllUstensils(filteredRecipes);
+    } else {
+      displayRecipes(recipesCache);
+      getAllIngredients(recipesCache);
+      getAllDevices(recipesCache);
+      getAllUstensils(recipesCache);
     }
   });
 
