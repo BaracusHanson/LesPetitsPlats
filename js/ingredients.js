@@ -5,14 +5,17 @@ import { criteriaTab } from "./index.js";
 export async function getAllIngredients(recipes) {
   const ingredientsTagCloser = document.getElementById("ingredientsTagCloser");
 
-  // Récupération des ingrédients uniques
-  const ingredientTagTable = [
-    ...new Set(
-      recipes.flatMap((recipe) =>
-        recipe.ingredients.map((ingredient) => ingredient.ingredient)
-      )
-    ),
-  ];
+  // Récupération des ingrédients uniques avec une boucle native
+  const ingredientTagTable = [];
+  for (let i = 0; i < recipes.length; i++) {
+    const recipe = recipes[i];
+    for (let j = 0; j < recipe.ingredients.length; j++) {
+      const ingredient = recipe.ingredients[j].ingredient;
+      if (!ingredientTagTable.includes(ingredient)) {
+        ingredientTagTable.push(ingredient);
+      }
+    }
+  }
 
   // Met à jour la liste des ingrédients affichés
   updateIngredientList(ingredientTagTable, recipes);
@@ -28,26 +31,26 @@ export async function getAllIngredients(recipes) {
 // Met à jour la liste des ingrédients dans le DOM
 export function updateIngredientList(filteredIngredients, recipes) {
   const ingredientListe = document.getElementById("ingredientListe");
-  const ingredientsTagContainer = document.getElementById(
-    "ingredientsTagContainer"
-  );
+  const ingredientsTagContainer = document.getElementById("ingredientsTagContainer");
 
-  // Générer la liste des ingrédients
-  ingredientListe.innerHTML = filteredIngredients
-    .map(
-      (el, index) =>
-        `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
-          ${el}
-        </li>`
-    )
-    .join("");
+  // Générer la liste des ingrédients avec une boucle native
+  let htmlContent = "";
+  for (let i = 0; i < filteredIngredients.length; i++) {
+    htmlContent += `
+      <li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${i}">
+        ${filteredIngredients[i]}
+      </li>
+    `;
+  }
+  ingredientListe.innerHTML = htmlContent;
 
   // Ajouter des gestionnaires d'événements pour chaque ingrédient
-  ingredientListe.querySelectorAll(".ingredient").forEach((element) => {
-    element.addEventListener("click", () =>
-      handleIngredientClick(element, recipes, ingredientsTagContainer)
+  const ingredientElements = ingredientListe.querySelectorAll(".ingredient");
+  for (let i = 0; i < ingredientElements.length; i++) {
+    ingredientElements[i].addEventListener("click", () =>
+      handleIngredientClick(ingredientElements[i], recipes, ingredientsTagContainer)
     );
-  });
+  }
 
   // Gestion de la recherche dynamique
   handleDynamicSearch(filteredIngredients, recipes, ingredientsTagContainer);
@@ -82,27 +85,32 @@ function handleDynamicSearch(filteredIngredients, recipes, container) {
 
     if (value !== "" && value.length >= 3) {
       // Filtrer les ingrédients affichés
-      const filteredIngredient = filteredIngredients.filter((el) =>
-        el.toLowerCase().includes(value)
-      );
+      const filteredIngredient = [];
+      for (let i = 0; i < filteredIngredients.length; i++) {
+        if (filteredIngredients[i].toLowerCase().includes(value)) {
+          filteredIngredient.push(filteredIngredients[i]);
+        }
+      }
 
       // Mettre à jour la liste affichée
       const ingredientListe = document.getElementById("ingredientListe");
-      ingredientListe.innerHTML = filteredIngredient
-        .map(
-          (el, index) =>
-            `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
-              ${el}
-            </li>`
-        )
-        .join("");
+      let htmlContent = "";
+      for (let i = 0; i < filteredIngredient.length; i++) {
+        htmlContent += `
+          <li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${i}">
+            ${filteredIngredient[i]}
+          </li>
+        `;
+      }
+      ingredientListe.innerHTML = htmlContent;
 
       // Ajouter des gestionnaires d'événements pour chaque ingrédient filtré
-      ingredientListe.querySelectorAll(".ingredient").forEach((element) => {
-        element.addEventListener("click", () =>
-          handleIngredientClick(element, recipes, container)
+      const ingredientElements = ingredientListe.querySelectorAll(".ingredient");
+      for (let i = 0; i < ingredientElements.length; i++) {
+        ingredientElements[i].addEventListener("click", () =>
+          handleIngredientClick(ingredientElements[i], recipes, container)
         );
-      });
+      }
     } else {
       // Réinitialiser la liste si aucune recherche ou saisie insuffisante
       updateIngredientList(filteredIngredients, recipes);

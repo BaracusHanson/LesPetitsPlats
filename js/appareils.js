@@ -5,100 +5,111 @@ import { criteriaTab } from "./index.js";
 export async function getAllDevices(recipes) {
   const appareilsTagCloser = document.getElementById("appareilsTagCloser");
 
-  // Récupération des appareils uniques
-  const devicesTagTable = [
-    ...new Set(recipes.flatMap((recipe) => recipe.appliance)),
-  ];
+  // Récupération des appareils uniques avec une boucle native
+  const devicesTagTable = [];
+  for (let i = 0; i < recipes.length; i++) {
+    const appliance = recipes[i].appliance;
+    if (!devicesTagTable.includes(appliance)) {
+      devicesTagTable.push(appliance);
+    }
+  }
 
-  // Met à jour la liste des ingrédients affichés
+  // Met à jour la liste des appareils affichés
   updateDeviceList(devicesTagTable, recipes);
 
-  // Réinitialiser l'input et afficher la liste par défaut des ingrédients
+  // Réinitialiser l'input et afficher la liste par défaut des appareils
   appareilsTagCloser.addEventListener("click", () => {
-    const AppareilsSearch = document.querySelector("#appareilsSearch");
-    AppareilsSearch.value = "";
+    const appareilsSearch = document.querySelector("#appareilsSearch");
+    appareilsSearch.value = "";
     updateDeviceList(devicesTagTable, recipes);
   });
 }
 
-// Met à jour la liste des ingrédients dans le DOM
+// Met à jour la liste des appareils dans le DOM
 export function updateDeviceList(filteredDevices, recipes) {
-  const AppareilsListe = document.getElementById("appareilsListe");
+  const appareilsListe = document.getElementById("appareilsListe");
   const appareilsTagContainer = document.getElementById(
     "appareilsTagContainer"
   );
 
-  // Générer la liste des ingrédients
-  AppareilsListe.innerHTML = filteredDevices
-    .map(
-      (el, index) =>
-        `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] appareil capitalize" data-index="${index}">
-          ${el}
-        </li>`
-    )
-    .join("");
+  // Générer la liste des appareils avec une boucle native
+  let htmlContent = "";
+  for (let i = 0; i < filteredDevices.length; i++) {
+    htmlContent += `
+      <li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] appareil capitalize" data-index="${i}">
+        ${filteredDevices[i]}
+      </li>
+    `;
+  }
+  appareilsListe.innerHTML = htmlContent;
 
-  // Ajouter des gestionnaires d'événements pour chaque ingrédient
-  AppareilsListe.querySelectorAll(".appareil").forEach((element) => {
-    element.addEventListener("click", () =>
-      handleAppareilClick(element, recipes, appareilsTagContainer)
+  // Ajouter des gestionnaires d'événements pour chaque appareil
+  const appareilElements = appareilsListe.querySelectorAll(".appareil");
+  for (let i = 0; i < appareilElements.length; i++) {
+    appareilElements[i].addEventListener("click", () =>
+      handleAppareilClick(appareilElements[i], recipes, appareilsTagContainer)
     );
-  });
+  }
 
   // Gestion de la recherche dynamique
   handleDynamicSearch(filteredDevices, recipes, appareilsTagContainer);
 }
 
-// Gère les clics sur un ingrédient
+// Gère les clics sur un appareil
 function handleAppareilClick(element, recipes, container) {
   const criteria = element.textContent.trim();
   const appareilsInfos = document.querySelector(".appareilsInfos");
 
   appareilsInfos.classList.remove("infos-active");
   if (!criteriaTab.includes(criteria)) {
-    // Ajouter l'ingrédient sélectionné à `criteriaTab`
+    // Ajouter l'appareil sélectionné à `criteriaTab`
     criteriaTab.push(criteria);
 
     // Mettre à jour les recettes affichées
     const filteredRecipes = searchRecipesNative(recipes, criteriaTab);
     displayRecipes(filteredRecipes);
 
-    // Créer et afficher un tag pour l'ingrédient sélectionné
+    // Créer et afficher un tag pour l'appareil sélectionné
     const tag = createTag(criteria, recipes, container);
     container.appendChild(tag);
   }
 }
 
-// Gère la recherche dynamique dans les ingrédients
+// Gère la recherche dynamique dans les appareils
 function handleDynamicSearch(filteredDevices, recipes, container) {
-  const AppareilsSearch = document.querySelector("#appareilsSearch");
+  const appareilsSearch = document.querySelector("#appareilsSearch");
 
-  AppareilsSearch.addEventListener("input", (e) => {
+  appareilsSearch.addEventListener("input", (e) => {
     const value = e.target.value.trim().toLowerCase();
 
     if (value !== "" && value.length >= 3) {
-      // Filtrer les ingrédients affichés
-      const filteredDevice = filteredDevices.filter((el) =>
-        el.toLowerCase().includes(value)
-      );
+      // Filtrer les appareils affichés avec une boucle native
+      const filteredDevice = [];
+      for (let i = 0; i < filteredDevices.length; i++) {
+        if (filteredDevices[i].toLowerCase().includes(value)) {
+          filteredDevice.push(filteredDevices[i]);
+        }
+      }
 
       // Mettre à jour la liste affichée
-      const appareilListe = document.getElementById("appareilsListe");
-      appareilListe.innerHTML = filteredDevice
-        .map(
-          (el, index) =>
-            `<li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] ingredient capitalize" data-index="${index}">
-              ${el}
-            </li>`
-        )
-        .join("");
+      const appareilsListe = document.getElementById("appareilsListe");
+      let htmlContent = "";
+      for (let i = 0; i < filteredDevice.length; i++) {
+        htmlContent += `
+          <li class="py-[9px] hover:bg-[#FFD15B] pb-0 px-[60px] appareil capitalize" data-index="${i}">
+            ${filteredDevice[i]}
+          </li>
+        `;
+      }
+      appareilsListe.innerHTML = htmlContent;
 
       // Ajouter des gestionnaires d'événements pour chaque appareil filtré
-      appareilListe.querySelectorAll(".ingredient").forEach((element) => {
-        element.addEventListener("click", () =>
-          handleAppareilClick(element, recipes, container)
+      const appareilElements = appareilsListe.querySelectorAll(".appareil");
+      for (let i = 0; i < appareilElements.length; i++) {
+        appareilElements[i].addEventListener("click", () =>
+          handleAppareilClick(appareilElements[i], recipes, container)
         );
-      });
+      }
     } else {
       // Réinitialiser la liste si aucune recherche ou saisie insuffisante
       updateDeviceList(filteredDevices, recipes);
@@ -106,7 +117,7 @@ function handleDynamicSearch(filteredDevices, recipes, container) {
   });
 }
 
-// Crée un tag pour un ingrédient sélectionné
+// Crée un tag pour un appareil sélectionné
 function createTag(criteria, recipes, container) {
   const tag = document.createElement("div");
   tag.className = "flex-col gap-[14px] bg-[#FFD15B] rounded-[11px] border";
