@@ -1,8 +1,7 @@
 module.exports = {
   content: [
     "./*.html", // Rechercher dans tous les fichiers .html dans le répertoire racine
-   
-  
+    "./*.js", // Rechercher dans tous les fichiers .js dans le répertoire racine
   ],
   theme: {
     extend: {
