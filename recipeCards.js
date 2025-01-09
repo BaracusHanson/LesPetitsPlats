@@ -24,41 +24,42 @@ function generateRecipeCard(recipe) {
   }
 
   return `
-    <div class="bg-white rounded-[21px] overflow-hidden h-[731px] [box-shadow:0px_4px_34px_30px_rgba(0,0,0,0.04)]">
-      <div class="w-full h-[253px] mb-8 relative">
-        <img
-          src="./assets/Images/${recipe.image}"
-          alt="${recipe.name}"
-          class="w-full h-[253px] object-cover object-center"
-        />
-        <div class="w-[63px] h-[26px] absolute top-[21px] right-[22px] bg-[#FFD15B] px-15px py-[5px] flex justify-center items-center font-manrope text-[#1B1B1B] text-[12px] rounded-[14px]">
-          ${recipe.time}min
-        </div>
-      </div>
-      <h2 class="font-anton text-[18px] text-[#000] mb-[29px] capitalize w-full text-start pl-[25px]">
-        ${recipe.name}
-      </h2>
-      <div class="px-[25px] w-full h-[329px] mb-[61px]">
-        <section class="flex flex-col gap-8">
-          <div class="flex flex-col gap-[15px]">
-            <h3 class="uppercase font-manrope font-[700] text-[#7A7A7A] text-[12px] tracking-widest">
-              Recette
-            </h3>
-            <p class="font-manrope text-[#1B1B1B] text-[14px] text-[400] line-clamp-3">
-              ${recipe.description}
-            </p>
-          </div>
-          <div class="flex flex-col gap-[15px]">
-            <h3 class="uppercase font-manrope font-[700] text-[#7A7A7A] text-[12px] tracking-widest">
-              Ingrédients
-            </h3>
-            <ul class="grid grid-cols-2 gap-y-[21px]">
-              ${ingredientsList}
-            </ul>
-          </div>
-        </section>
-      </div>
+   <div class="bg-white rounded-[1.3125rem] overflow-hidden h-[45.6875rem] shadow-lg">
+  <div class="w-full h-[15.8125rem] mb-8 relative">
+    <img
+      src="./assets/Images/${recipe.image}"
+      alt="${recipe.name}"
+      class="w-full h-[15.8125rem] object-cover object-center"
+    />
+    <div class="w-[3.9375rem] h-[1.625rem] absolute top-[1.3125rem] right-[1.375rem] bg-[#FFD15B] px-4 py-[0.3125rem] flex justify-center items-center font-manrope text-[#1B1B1B] text-[0.75rem] rounded-[0.875rem]">
+      ${recipe.time}min
     </div>
+  </div>
+  <h2 class="font-anton text-[1.125rem] text-[#000] mb-[1.8125rem] capitalize w-full text-start pl-[1.5625rem]">
+    ${recipe.name}
+  </h2>
+  <div class="px-[1.5625rem] w-full h-[20.5625rem] mb-[3.8125rem]">
+    <section class="flex flex-col gap-8">
+      <div class="flex flex-col gap-[0.9375rem]">
+        <h3 class="uppercase font-manrope font-bold text-[#7A7A7A] text-[0.75rem] tracking-widest">
+          Recette
+        </h3>
+        <p class="font-manrope text-[#1B1B1B] text-[0.875rem] font-normal line-clamp-3">
+          ${recipe.description}
+        </p>
+      </div>
+      <div class="flex flex-col gap-[0.9375rem]">
+        <h3 class="uppercase font-manrope font-bold text-[#7A7A7A] text-[0.75rem] tracking-widest">
+          Ingrédients
+        </h3>
+        <ul class="grid grid-cols-2 gap-y-[1.3125rem]">
+          ${ingredientsList}
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+
   `;
 }
 
