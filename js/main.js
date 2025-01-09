@@ -25,7 +25,12 @@ async function init() {
     });
   }
   searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.trim();
+    const regex = /[^A-Za-z0-9]/g;
+    let query = e.target.value;
+    if (regex.test(query)) {
+      query = query.replace(regex, "").trim();
+      searchInput.value = query;
+    }
 
     if (query.length >= 3) {
       if (!criteriaTab.includes(query)) {
