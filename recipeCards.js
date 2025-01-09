@@ -12,8 +12,8 @@ export function displayRecipes(recipes) {
 
 // Fonction pour générer une carte de recette
 function generateRecipeCard(recipe) {
-    return `
-        <div class="bg-white rounded-[21px] overflow-hidden h-[731px] [box-shadow:0px_4px_34px_30px_rgba(0,0,0,0.04)]">
+  return `
+        <div class="bg-white rounded-[21px] overflow-hidden h-[731px] shadow-lg">
           <div class="w-full h-[253px] mb-8 relative">
             <img
               src="./assets/Images/${recipe.image}"
@@ -51,11 +51,11 @@ function generateRecipeCard(recipe) {
           </div>
         </div>
       `;
-  }
+}
 
-  // Fonction pour générer un élément de liste d'ingrédient
+// Fonction pour générer un élément de liste d'ingrédient
 function generateIngredientListItem(ingredient) {
-    return `
+  return `
         <li class="font-manrope text-[#1B1B1B] capitalize flex flex-col font-bold">
           ${ingredient.ingredient}
           <span class="text-[#7A7A7A] font-medium text-[0.8rem]">
@@ -63,4 +63,4 @@ function generateIngredientListItem(ingredient) {
           </span>
         </li>
       `;
-  }
+}

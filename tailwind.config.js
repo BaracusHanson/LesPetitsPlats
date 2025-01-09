@@ -2,7 +2,6 @@ module.exports = {
   content: [
     "./*.html", // Rechercher dans tous les fichiers .html dans le répertoire racine
   ],
-
   theme: {
     extend: {
       fontFamily: {
@@ -13,9 +12,9 @@ module.exports = {
         jaune: "#FFD15B", // Déclare la couleur jaune personnalisée
       },
       fontSize: {
-        mainTitle: "44px", // Déclare la taille de police "mainTitle"
+        mainTitle: "2.75rem", // Déclare la taille de police "mainTitle" en rem (44px)
       },
-      center: {},
     },
   },
+  plugins: [],
 };
